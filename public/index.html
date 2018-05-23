@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<canvas width="800" height="100" id="main-canvas"></canvas>
+<script>
+  const pixelColors = {
+    black: 'rgb(0,0,0)',
+    white: 'rgb(255,255,255)',
+  };
+
+  function drawCanvasElements(bits) {
+    const canvas = document.getElementById('main-canvas');
+    const ctx = canvas.getContext('2d');
+    const width = canvas.width;
+    const height = canvas.height;
+    
+    for (let x = 0; x < width; x++) {
+      for (let y = 0; y < height; y++) {
+        const bitIndex = x + y * width;
+        const currentBit = bits[bitIndex];
+
+        // I like using switch statements because of how explicit they are in these cases
+        let currentColor;
+        switch(currentBit) {
+          case 1:
+            currentColor = pixelColors.black;
+            break;
+          case 0:
+          default:
+            currentColor = pixelColors.white;
+        }
+
+        ctx.fillStyle = currentColor
+        ctx.fillRect(x,  y, 1, 1);
+      }
+    }
+  }
+
+  // https://github.com/joewalnes/websocketd
+  const ws = new WebSocket('ws://localhost:3212/');
+  ws.onopen = function() {
+    console.log('CONNECT');
+  };
+  ws.onclose = function() {
+    console.log('DISCONNECT');
+  };
+  ws.onmessage = function(event) {
+    try {
+      const bits = event.data
+        .split(' ')
+        // I am taking advantage of ES6 syntax assuming that either this would be compiled to a safe version of js or someone is using a fancy browser
+        .map(bit => parseInt(bit, 10));
+      drawCanvasElements(bits);
+    }
+    catch (e) {
+      console.error('It appears that something went wrong while retrieving bits');
+      throw e;
+    }
+  };
+</script>

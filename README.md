@@ -16,10 +16,23 @@ So, then I decided to have node create the random bits but still have the bits s
 time ./create-random-bits.js 80000 > /dev/null
 ```
 
-### Setup
-First, install websocketd. If you are on a Mac, like myself, you can just run `./setup.sh`.
+Creating the `websocketd` server was straight forward. I followed the instructions on github.
+
+I chose to change the canvas colors using the `fillRect` syntax for readibility, but it is slower than actually setting each pixel's color.
+
+### System Requirements
+First, install websocketd. If you are on a Mac you can just run `./setup.sh` (assuming you have homebrew installed).
+
+Also, make sure you have node.js installed.
 
 ### Start Websocket Server
+Simply run 
 ```sh
-./websocket.sh
+./run.sh
 ```
+
+This should open a new window that will refresh to the correct page momentarily.
+
+Example http://ec2-52-55-211-196.compute-1.amazonaws.com:3213/
+
+![example image](images/example-image.png)
